@@ -1,0 +1,57 @@
+name: BDD Test Suite — CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  bdd-tests:
+    name: Run BDD Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: playwright install chromium --with-deps
+
+      - name: Create reports directory
+        run: mkdir -p reports
+
+      - name: Run BDD test suite
+        env:
+          HEADLESS: "true"
+          BROWSER: "chromium"
+          PRACTICE_BASE_URL: "https://practice.expandtesting.com"
+        run: |
+          pytest tests/ \
+            --html=reports/test-report.html \
+            --self-contained-html \
+            -v
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bdd-test-report
+          path: reports/test-report.html
+          retention-days: 14

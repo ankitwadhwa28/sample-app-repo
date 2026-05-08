@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Test artifacts
+reports/
+.pytest_cache/
+
+# Environment
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
