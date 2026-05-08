@@ -5,7 +5,7 @@ from typing import List
 app = FastAPI(title="Sample App", version="1.0.0")
 
 _users = [
-    {"id": 1, "name": "Alice", "email": "alice@example.com"},
+    {"id": 1, "name": "Alice", "email": "alice2@example.com"},
     {"id": 2, "name": "Bob", "email": "bob@example.com"},
 ]
 
